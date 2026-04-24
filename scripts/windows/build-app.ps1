@@ -70,7 +70,12 @@ cd /d "$appDir"
 npm run tauri build
 "@
 
-cmd /c $cmd
+$cmdFile = Join-Path $env:TEMP "cliproxyapp-build.cmd"
+Set-Content -Path $cmdFile -Value $cmd -Encoding ASCII
+cmd /d /c $cmdFile
+if ($LASTEXITCODE -ne 0) {
+  throw "Windows build failed with exit code $LASTEXITCODE"
+}
 
 $bundleDir = Join-Path $appDir "src-tauri\target\release\bundle"
 Write-Host ""
