@@ -99,6 +99,18 @@ Windows 构建脚本：
 powershell -ExecutionPolicy Bypass -File .\scripts\windows\build-app.ps1
 ```
 
+如果要在 Windows 机器的 `L:\号池` 目录拉取并打包，可以先同步工作区：
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\scripts\windows\sync-workspace.ps1 -WorkspaceRoot "L:\号池"
+```
+
+然后执行构建：
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\scripts\windows\build-app.ps1 -WorkspaceRoot "L:\号池"
+```
+
 默认行为：
 
 - 构建 `CLIProxyManagement`
@@ -176,4 +188,3 @@ powershell -ExecutionPolicy Bypass -File .\scripts\windows\build-app.ps1
 - 自动生成版本发布清单
 - Windows 远程构建脚本
 - macOS / Windows / Linux 的统一发布流程
-
