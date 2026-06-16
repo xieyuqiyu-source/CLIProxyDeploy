@@ -1,24 +1,23 @@
-# New API + CLIProxyApi Temporary Notes
+# New API + CLIProxyApi 临时备忘
 
-Last updated: 2026-06-16 Asia/Shanghai
+更新时间：2026-06-16 Asia/Shanghai
 
-This file is a temporary private deployment note. Delete it after the New API
-channel configuration is no longer needed.
+这是一份临时的私有部署备忘。New API 渠道配置稳定后，可以删除这份文件。
 
-## Server
+## 服务器信息
 
-- SSH alias: `tencent`
-- Public IP: `124.223.111.163`
-- New API public entry: `http://124.223.111.163/`
-- New API setup page: `http://124.223.111.163/setup`
-- New API server path: `/opt/new-api`
-- New API container: `new-api`
-- Redis container: `new-api-redis`
-- New API local port on host: `3008`
+- SSH 别名：`tencent`
+- 公网 IP：`124.223.111.163`
+- New API 外网入口：`http://124.223.111.163/`
+- New API 初始化页面：`http://124.223.111.163/setup`
+- New API 服务目录：`/opt/new-api`
+- New API 容器名：`new-api`
+- Redis 容器名：`new-api-redis`
+- New API 在宿主机上的本地端口：`3008`
 
-## New API Channel For CLIProxyApi
+## New API 对接 CLIProxyApi 的渠道配置
 
-Use this channel configuration in New API:
+在 New API 里添加 CLIProxyApi 渠道时使用：
 
 ```json
 {
@@ -28,74 +27,71 @@ Use this channel configuration in New API:
 }
 ```
 
-Notes:
+注意：
 
-- Do not use `http://127.0.0.1:8317` inside New API. New API runs in Docker,
-  so `127.0.0.1` points to the container itself.
-- `cliproxyapi.local` is mapped in `/opt/new-api/docker-compose.yml` to the
-  Docker host gateway.
-- Nginx exposes `cliproxyapi.local` internally and proxies to
-  `127.0.0.1:8317`.
+- 不要在 New API 里填 `http://127.0.0.1:8317`。New API 运行在 Docker 容器里，容器里的 `127.0.0.1` 指的是容器自己，不是宿主机。
+- `cliproxyapi.local` 已在 `/opt/new-api/docker-compose.yml` 里映射到 Docker 宿主机网关。
+- Nginx 内部暴露了 `cliproxyapi.local`，并代理到宿主机上的 `127.0.0.1:8317`。
 
-Verified from inside the New API container:
+已在 New API 容器内验证：
 
 ```text
 http://cliproxyapi.local/v1/models
 ```
 
-returns `200 OK`.
+返回 `200 OK`。
 
-## CLIProxyApi
+## CLIProxyApi 信息
 
-- Host listen address: `127.0.0.1:8317`
-- Public management URL: `https://cliproxy.szxsai.com/v0/management`
-- Management UI: `https://cliproxy.szxsai.com/cpm/`
-- Config file: `/etc/cliproxyapi/config.yaml`
-- Binary path: `/var/www/CLIProxyApi/cliproxyapi`
-- systemd service: `cliproxyapi.service`
-- API key: `mMt12XOUsERCXcspFslU8Rg6AesLvQ2e`
-- Manager key: `xuanshu.1`
+- 宿主机监听地址：`127.0.0.1:8317`
+- 公开管理接口：`https://cliproxy.szxsai.com/v0/management`
+- 管理端页面：`https://cliproxy.szxsai.com/cpm/`
+- 配置文件：`/etc/cliproxyapi/config.yaml`
+- 二进制路径：`/var/www/CLIProxyApi/cliproxyapi`
+- systemd 服务：`cliproxyapi.service`
+- API Key：`mMt12XOUsERCXcspFslU8Rg6AesLvQ2e`
+- Manager 管理密钥：`xuanshu.1`
 
-## Proxy
+## 代理信息
 
-Server local proxy:
+服务器本地代理：
 
 ```text
 http://127.0.0.1:7890
 ```
 
-Service:
+代理服务：
 
 ```text
 mihomo-ai.service
 ```
 
-Current proxy node:
+当前代理节点：
 
 ```text
 SG-01
 ```
 
-Observed proxy egress:
+已观测到的代理出口：
 
 ```text
 188.253.120.98
 Singapore / Akari Networks
 ```
 
-`CLIProxyApi` config currently has:
+`CLIProxyApi` 当前配置中包含：
 
 ```yaml
 proxy-url: "http://127.0.0.1:7890"
 ```
 
-Docker also has a daemon-level pull proxy configured at:
+Docker 也配置了守护进程级别的镜像拉取代理：
 
 ```text
 /etc/systemd/system/docker.service.d/http-proxy.conf
 ```
 
-## Useful Checks
+## 常用检查命令
 
 ```bash
 ssh tencent 'cd /opt/new-api && docker compose ps'
